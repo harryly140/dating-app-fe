@@ -12,22 +12,23 @@ export class MembersService {
   constructor(private http: HttpClient) { }
 
   getMembers() {
-    return this.http.get<Member[]>(this.baseUrl + 'users', this.getHttpOptions());
+    return this.http.get<Member[]>(this.baseUrl + 'users');
   }
 
   getMember(username: string) {
-    return this.http.get<Member>(this.baseUrl + 'users/' + username, this.getHttpOptions());
+    return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
 
   // Gets auth token to be passed up when getting members
-  getHttpOptions() {
-    const userString = localStorage.getItem('user');
-    if(!userString) return;
-    const user = JSON.parse(userString);
-    return {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + user.token
-      })
-    }
-  }
+  // Moved this logic to jwt.interceptor
+  // getHttpOptions() {
+  //   const userString = localStorage.getItem('user');
+  //   if(!userString) return;
+  //   const user = JSON.parse(userString);
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: 'Bearer ' + user.token
+  //     })
+  //   }
+  // }
 }
