@@ -1,0 +1,19 @@
+/* On hover */
+.card:hover img {
+    transform: scale(1.2, 1.2);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+    opacity: 0.7;
+}
+
+/* Not on hover */
+.card img {
+    transform: scale(1.0, 1.0);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+}
+
+/* Makes it so the zoom in is contained in the box */
+.card-img-wrapper {
+    overflow: hidden;
+}
