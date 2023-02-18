@@ -19,6 +19,10 @@ export class MembersService {
     return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
 
+  updateMember(member: Member) {
+    return this.http.put(this.baseUrl + 'users', member);
+  }
+
   // Gets auth token to be passed up when getting members
   // Moved this logic to jwt.interceptor
   // getHttpOptions() {
