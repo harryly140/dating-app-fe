@@ -20,7 +20,7 @@ export class PhotoEditorComponent implements OnInit {
   baseUrl = environment.apiUrl;
   user: User | undefined;
 
-  constructor(private accountService: AccountService, private memberServie: MembersService) {
+  constructor(private accountService: AccountService, private memberService: MembersService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if(user) this.user = user;
@@ -37,7 +37,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   setMainPhoto(photo: Photo) {
-    this.memberServie.setMainPhoto(photo.id).subscribe({
+    this.memberService.setMainPhoto(photo.id).subscribe({
       next: () => {
         if(this.user && this.member) {
           this.user.photoUrl = photo.url;
@@ -47,6 +47,16 @@ export class PhotoEditorComponent implements OnInit {
             if(p.isMain) p.isMain = false;
             if(p.id == photo.id) p.isMain = true;
           })
+        }
+      }
+    })
+  }
+
+  deletePhoto(photoId: Number) {
+    this.memberService.deletePhoto(photoId).subscribe({
+      next: _ => {
+        if(this.member) {
+          this.member.photos = this.member.photos.filter(x => x.id !== photoId);
         }
       }
     })

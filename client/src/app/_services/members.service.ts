@@ -38,8 +38,14 @@ export class MembersService {
     );
   }
 
+  // Update has second param, usually indicating what is being updated
   setMainPhoto(photoId: Number) {
     return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  // Delete does not have second param
+  deletePhoto(photoId: Number) {
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
   // Gets auth token to be passed up when getting members
