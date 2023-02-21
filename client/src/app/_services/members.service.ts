@@ -38,6 +38,10 @@ export class MembersService {
     );
   }
 
+  setMainPhoto(photoId: Number) {
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
   // Gets auth token to be passed up when getting members
   // Moved this logic to jwt.interceptor
   // getHttpOptions() {
