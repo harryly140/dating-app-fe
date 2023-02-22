@@ -13,11 +13,13 @@ export class RegisterComponent implements OnInit{
   @Output() cancelRegister = new EventEmitter(); // Child to Parent
   model: any = {};
   registerForm: FormGroup = new FormGroup({}); // Declaring reactive forms
+  maxDate: Date = new Date();
 
   constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
   // Initiailizing reactive forms
