@@ -45,6 +45,36 @@ export class MembersService {
     // );
   }
 
+  getMember(username: string) {
+    // const member = this.members.find(x => x.userName === username);
+    // if(member) return of(member);
+    const member = [...this.memberCache.values()]
+      .reduce((arr, elem) => arr.concat(elem.result), [])
+      .find((member: Member) => member.userName == username);
+    if(member) return of(member);
+    
+    return this.http.get<Member>(this.baseUrl + 'users/' + username);
+  }
+
+  updateMember(member: Member) {
+    return this.http.put(this.baseUrl + 'users', member).pipe(
+      map(() => {
+        const index = this.members.indexOf(member);
+        this.members[index] = {...this.members[index], ...member}
+      })
+    );
+  }
+
+  // Update has second param, usually indicating what is being updated
+  setMainPhoto(photoId: Number) {
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  // Delete does not have second param
+  deletePhoto(photoId: Number) {
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
   private getPaginatedResult<T>(url: string, params: HttpParams) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>;
 
@@ -71,31 +101,6 @@ export class MembersService {
     params = params.append('pageSize', pageSize);
 
     return params;
-  }
-
-  getMember(username: string) {
-    const member = this.members.find(x => x.userName === username);
-    if(member) return of(member);
-    return this.http.get<Member>(this.baseUrl + 'users/' + username);
-  }
-
-  updateMember(member: Member) {
-    return this.http.put(this.baseUrl + 'users', member).pipe(
-      map(() => {
-        const index = this.members.indexOf(member);
-        this.members[index] = {...this.members[index], ...member}
-      })
-    );
-  }
-
-  // Update has second param, usually indicating what is being updated
-  setMainPhoto(photoId: Number) {
-    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
-  }
-
-  // Delete does not have second param
-  deletePhoto(photoId: Number) {
-    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
   // Gets auth token to be passed up when getting members
