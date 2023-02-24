@@ -13,10 +13,14 @@ export class MembersService {
   baseUrl = environment.apiUrl;
   members: Member[] = [];
   // paginatedResult: PaginatedResult<Member[]> = new PaginatedResult<Member[]>; // Moved to getPaginatedResult method
+  memberCache = new Map();
 
   constructor(private http: HttpClient) { }
 
   getMembers(userParams: UserParams) {
+    const response = this.memberCache.get(Object.values(userParams).join('-'));
+    if(response) return of(response);
+
     let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize); // HTTP params will be populated from this
 
     params = params.append('minAge', userParams.minAge);
@@ -25,7 +29,12 @@ export class MembersService {
     params = params.append('orderBy', userParams.orderBy);
 
     // This is getting the whole Http response with headers
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params)
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params).pipe(
+      map(response => {
+        this.memberCache.set(Object.values(userParams).join('-'), response);
+        return response;
+      })
+    )
     // This is not getting the headers
     // if(this.members.length > 0) return of(this.members); // If there is already members, no need to go fetch from API. Gets it from this service
     // return this.http.get<Member[]>(this.baseUrl + 'users').pipe(
