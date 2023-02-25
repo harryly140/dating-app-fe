@@ -45,7 +45,6 @@ export class MembersService {
     }
     return;
   }
-  
 
   getMembers(userParams: UserParams) {
     const response = this.memberCache.get(Object.values(userParams).join('-'));
@@ -104,6 +103,14 @@ export class MembersService {
   // Delete does not have second param
   deletePhoto(photoId: Number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {});
+  }
+
+  getLikes(predicate: string) {
+    return this.http.get(this.baseUrl + 'likes?predicate=' + predicate);
   }
 
   private getPaginatedResult<T>(url: string, params: HttpParams) {
